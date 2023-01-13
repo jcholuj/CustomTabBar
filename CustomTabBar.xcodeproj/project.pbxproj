@@ -19,14 +19,12 @@
 		8888ED912969635500D1984D /* ButtonConsoleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8888ED902969635500D1984D /* ButtonConsoleView.swift */; };
 		8888ED942969643D00D1984D /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 8888ED932969643D00D1984D /* ComposableArchitecture */; };
 		8888ED962969643D00D1984D /* Dependencies in Frameworks */ = {isa = PBXBuildFile; productRef = 8888ED952969643D00D1984D /* Dependencies */; };
-		8888ED9E2969755D00D1984D /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8888ED9D2969755D00D1984D /* View+Extensions.swift */; };
 		8888EDA729698D6700D1984D /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8888EDA629698D6700D1984D /* DashboardView.swift */; };
 		8888EDAA29698EE000D1984D /* InputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8888EDA929698EE000D1984D /* InputView.swift */; };
 		8888EDAC2969985A00D1984D /* InputConsoleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8888EDAB2969985A00D1984D /* InputConsoleView.swift */; };
 		8888EDAF296ACD6400D1984D /* InputType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8888EDAE296ACD6400D1984D /* InputType.swift */; };
 		8888EDB1296ACF5400D1984D /* ButtonConsole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8888EDB0296ACF5400D1984D /* ButtonConsole.swift */; };
 		8888EDB4296ACFA800D1984D /* InputConsole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8888EDB3296ACFA800D1984D /* InputConsole.swift */; };
-		8888EDB7296AD45900D1984D /* InputConsoleView+Bindings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8888EDB6296AD45900D1984D /* InputConsoleView+Bindings.swift */; };
 		8888EDBA296AE38000D1984D /* ControllerItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8888EDB9296AE38000D1984D /* ControllerItemView.swift */; };
 		8888EDBD296AED2F00D1984D /* ControllerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8888EDBC296AED2F00D1984D /* ControllerType.swift */; };
 		8888EDBF296AF25500D1984D /* ControllerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8888EDBE296AF25500D1984D /* ControllerView.swift */; };
@@ -62,14 +60,12 @@
 		8888ED8B2968A67200D1984D /* SecondaryStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondaryStyle.swift; sourceTree = "<group>"; };
 		8888ED8D2968A6D600D1984D /* TertiaryStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TertiaryStyle.swift; sourceTree = "<group>"; };
 		8888ED902969635500D1984D /* ButtonConsoleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonConsoleView.swift; sourceTree = "<group>"; };
-		8888ED9D2969755D00D1984D /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
 		8888EDA629698D6700D1984D /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		8888EDA929698EE000D1984D /* InputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputView.swift; sourceTree = "<group>"; };
 		8888EDAB2969985A00D1984D /* InputConsoleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputConsoleView.swift; sourceTree = "<group>"; };
 		8888EDAE296ACD6400D1984D /* InputType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputType.swift; sourceTree = "<group>"; };
 		8888EDB0296ACF5400D1984D /* ButtonConsole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonConsole.swift; sourceTree = "<group>"; };
 		8888EDB3296ACFA800D1984D /* InputConsole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputConsole.swift; sourceTree = "<group>"; };
-		8888EDB6296AD45900D1984D /* InputConsoleView+Bindings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InputConsoleView+Bindings.swift"; sourceTree = "<group>"; };
 		8888EDB9296AE38000D1984D /* ControllerItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerItemView.swift; sourceTree = "<group>"; };
 		8888EDBC296AED2F00D1984D /* ControllerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerType.swift; sourceTree = "<group>"; };
 		8888EDBE296AF25500D1984D /* ControllerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerView.swift; sourceTree = "<group>"; };
@@ -119,7 +115,6 @@
 				8888ED9C2969752800D1984D /* Extensions */,
 				8888ED8F2968A74C00D1984D /* Style */,
 				8888ED85296878B700D1984D /* MainButton.swift */,
-				8888EDC0296C260A00D1984D /* IconButton.swift */,
 			);
 			path = MainButton;
 			sourceTree = "<group>";
@@ -178,7 +173,6 @@
 		8888ED9C2969752800D1984D /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				8888ED9D2969755D00D1984D /* View+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -206,6 +200,7 @@
 			isa = PBXGroup;
 			children = (
 				8888ED872968A5F100D1984D /* MainButton */,
+				8888EDC0296C260A00D1984D /* IconButton.swift */,
 			);
 			path = Button;
 			sourceTree = "<group>";
@@ -270,7 +265,6 @@
 			children = (
 				8888EDAB2969985A00D1984D /* InputConsoleView.swift */,
 				8888EDB3296ACFA800D1984D /* InputConsole.swift */,
-				8888EDB6296AD45900D1984D /* InputConsoleView+Bindings.swift */,
 			);
 			path = InputConsole;
 			sourceTree = "<group>";
@@ -479,7 +473,6 @@
 				8852694C2964DB05008A4963 /* Color+Extensions.swift in Sources */,
 				8888ED8C2968A67200D1984D /* SecondaryStyle.swift in Sources */,
 				8888EDCA296CC3B900D1984D /* ControllerConsole.swift in Sources */,
-				8888ED9E2969755D00D1984D /* View+Extensions.swift in Sources */,
 				8888EDB4296ACFA800D1984D /* InputConsole.swift in Sources */,
 				8888EDAF296ACD6400D1984D /* InputType.swift in Sources */,
 				8888EDC7296CC0F900D1984D /* Controller.swift in Sources */,
@@ -491,7 +484,6 @@
 				8888EDBD296AED2F00D1984D /* ControllerType.swift in Sources */,
 				8888ED8E2968A6D600D1984D /* TertiaryStyle.swift in Sources */,
 				8888EDBF296AF25500D1984D /* ControllerView.swift in Sources */,
-				8888EDB7296AD45900D1984D /* InputConsoleView+Bindings.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

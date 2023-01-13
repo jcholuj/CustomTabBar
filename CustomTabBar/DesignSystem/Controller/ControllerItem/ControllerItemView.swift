@@ -5,16 +5,16 @@ struct ControllerItemView: View {
   let type: ControllerType
   var icon: String? = nil
   
-  @Binding var selectedItems: [UUID]
+  @Binding var selectedItems: [SelectableModel]
   @State var isSelected: Bool
 
   var body: some View {
     baseView
       .onChange(of: selectedItems) { newValue in
-        isSelected = newValue.contains(model.id)
+        isSelected = newValue.contains(model)
       }
       .onTapGesture {
-        handleTapGesture(with: model.id)
+        handleTapGesture(with: model)
       }
   }
   
@@ -62,16 +62,16 @@ struct ControllerItemView: View {
     }
   }
   
-  private func handleTapGesture(with id: UUID) {
+  private func handleTapGesture(with model: SelectableModel) {
     guard !type.isSegmentedControl else {
-      selectedItems = [id]
+      selectedItems = [model]
       return
     }
     
-    if selectedItems.contains(id) {
-      selectedItems.removeAll { $0 == id }
+    if selectedItems.contains(model) {
+      selectedItems.removeAll { $0 == model }
     } else {
-      selectedItems.append(id)
+      selectedItems.append(model)
     }
   }
 }

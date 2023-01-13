@@ -1,21 +1,14 @@
 import SwiftUI
 
-struct TertiaryStyle: ButtonStyle {
-  func makeBody(configuration: Configuration) -> some View {
-    TertiaryButton(configuration: configuration)
-  }
+struct TertiaryStyle: MainButtonStyle {
+  let isEnabled: Bool
   
-  private struct TertiaryButton: View {
-    let configuration: ButtonStyle.Configuration
-    
-    @Environment(\.isEnabled) private var isEnabled
-    
-    var body: some View {
-      baseLabel(for: configuration)
-        .foregroundColor(
-          isEnabled ? Constants.textColor : Constants.disabledTextColor
-        )
-    }
+  func makeBody(configuration: Configuration) -> some View {
+    baseLabel(for: configuration)
+      .foregroundColor(
+        isEnabled ? Constants.textColor : Constants.disabledTextColor
+      )
+      .opacity(configuration.isPressed ? 0.5 : 1)
   }
   
   private enum Constants {

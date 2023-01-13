@@ -1,31 +1,24 @@
 import SwiftUI
 
-struct PrimaryStyle: ButtonStyle {
+struct PrimaryStyle: MainButtonStyle {
+  let isEnabled: Bool
+
   func makeBody(configuration: Configuration) -> some View {
-    PrimaryButton(configuration: configuration)
-  }
-  
-  private struct PrimaryButton: View {
-    let configuration: ButtonStyle.Configuration
-    
-    @Environment(\.isEnabled) private var isEnabled
-    
-    var body: some View {
-      baseLabel(for: configuration)
-        .foregroundColor(
-          isEnabled
-          ? Constants.textColor
-          : Constants.disabledTextColor
-        )
-        .background(
-          RoundedRectangle(cornerRadius: Constants.cornerRadius)
-            .fill(
-              isEnabled
-              ? Constants.backgroundColor
-              : Constants.disabledBackgroundColor
-            )
-        )
-    }
+    baseLabel(for: configuration)
+      .foregroundColor(
+        isEnabled
+        ? Constants.textColor
+        : Constants.disabledTextColor
+      )
+      .background(
+        RoundedRectangle(cornerRadius: Constants.cornerRadius)
+          .fill(
+            isEnabled
+            ? Constants.backgroundColor
+            : Constants.disabledBackgroundColor
+          )
+      )
+      .opacity(configuration.isPressed ? 0.5 : 1)
   }
   
   private enum Constants {

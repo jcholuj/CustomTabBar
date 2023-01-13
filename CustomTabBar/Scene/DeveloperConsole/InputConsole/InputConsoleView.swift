@@ -5,28 +5,29 @@ struct InputConsoleView: View {
   let store: StoreOf<InputConsole>
 
     var body: some View {
-      WithViewStore(store, observe: { $0 }) { viewStore in
+      WithViewStore(store) { viewStore in
         VStack {
           InputView(
-            type: .surname,
-            inputValue: viewStore.surnameInputValueBinding,
-            isValid: viewStore.surnameIsValidBinding,
-            isFocused: viewStore.surnameIsFocusedBinding,
-            isSecured: false
+            type: .text,
+            title: "Nazwisko",
+            placeholder: "Wpisz swoje nazwisko",
+            inputValue: viewStore.binding(\.surnameState.$inputValue),
+            isValid: viewStore.binding(\.surnameState.$isValid)
           )
           InputView(
-            type: .nip,
-            inputValue: viewStore.nipInputValueBinding,
-            isValid: viewStore.nipIsValidBinding,
-            isFocused: viewStore.nipIsFocusedBinding,
-            isSecured: false
+            type: .search,
+            title: "Urząd Skarbowy",
+            placeholder: "Wyszukaj Urząd",
+            inputValue: viewStore.binding(\.nipState.$inputValue),
+            isValid: viewStore.binding(\.nipState.$isValid),
+            tooltipAction: {}
           )
           InputView(
-            type: .password,
-            inputValue: viewStore.passwordInputValueBinding,
-            isValid: viewStore.passwordIsValidBinding,
-            isFocused: viewStore.passwordIsFocusedBinding,
-            isSecured: true
+            type: .secured,
+            title: "Hasło",
+            placeholder: "Wpisz hasło",
+            inputValue: viewStore.binding(\.passwordState.$inputValue),
+            isValid: viewStore.binding(\.passwordState.$isValid)
           )
         }
         .padding(.horizontal, 20)

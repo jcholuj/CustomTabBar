@@ -1,20 +1,37 @@
 import SwiftUI
 
-// TODO: - jcholuj - 07.01.2022
-/// Check if DesignSystem needs to be used on platform lower than iOS 15.0, because it will has an impact on implementation of custom placeholder color
-
 struct InputView: View {
   let type: InputType
+  let title: String
+  let placeholder: String
+  var tooltipAction: (() -> ())? = nil
   
   @Binding var inputValue: String
   @Binding var isValid: Bool
-  @Binding var isFocused: Bool
-
-  @State var isSecured: Bool
+  
+  @State private var isFocused: Bool = false
+  @State private var isSecured: Bool
+  
+  init(
+    type: InputType,
+    title: String,
+    placeholder: String,
+    inputValue: Binding<String>,
+    isValid: Binding<Bool>,
+    tooltipAction: (() -> Void)? = nil
+  ) {
+    self.type = type
+    self.title = title
+    self.placeholder = placeholder
+    self.tooltipAction = tooltipAction
+    self._inputValue = inputValue
+    self._isValid = isValid
+    isSecured = type == .secured
+  }
   
   var body: some View {
     VStack(alignment: .leading, spacing: Constants.componentSpacing) {
-      Text(type.title)
+      Text(title)
         .font(Styles.Fonts.headerRegular)
         .foregroundColor(.gray)
       HStack(spacing: Constants.textFieldSpacing) {
@@ -23,18 +40,19 @@ struct InputView: View {
             .padding(.leading, Constants.leadingRegularPadding)
         }
         textField
-        rightTextfieldItem
+        rightTooltipButton
       }
       .frame(height: Constants.textFieldHeight)
       .background(backgroundView)
       if !isValid {
-        Text(type.validationMessage)
+        // TODO: - jcholuj 12/01/2023 - this should be configured via validator
+        Text("Wpisz prawidłowe dane")
           .font(Styles.Fonts.smallRegular)
           .foregroundColor(.red)
       }
     }
     .frame(height: Constants.componentHeight)
-    .animation(.linear(duration: 0.1), value: isSecured)
+    .animation(Constants.securedButtonAnimation, value: isSecured)
   }
 }
 
@@ -43,30 +61,14 @@ struct InputView: View {
 private extension InputView {
   @ViewBuilder
   private var textField: some View {
-    ZStack {
-      SecureField(type.placeholder, text: $inputValue)
-        .padding(
-          .leading,
-          type.isSearchField
-          ? Constants.leadingSmallPadding
-          : Constants.leadingRegularPadding
-        )
-        .opacity(isSecured ? 1.0 : 0.0)
-      TextField(
-        type.placeholder,
-        text: $inputValue,
-        onEditingChanged: { isFocused = $0 }
-      )
-      .padding(
-        .leading,
-        type.isSearchField
-        ? Constants.leadingSmallPadding
-        : Constants.leadingRegularPadding
-      )
-      .foregroundColor(isSecured ? .clear : .black)
-      .tint(isSecured ? .clear : .black)
-      .autocorrectionDisabled()
-    }
+    // TODO: - SecuredField will be added in separate merge request
+    TextField(
+      placeholder,
+      text: $inputValue,
+      onEditingChanged: { isFocused = $0 }
+    )
+    .padding(.leading, Constants.leadingRegularPadding)
+    .autocorrectionDisabled()
   }
 }
 
@@ -74,37 +76,39 @@ private extension InputView {
 
 private extension InputView {
   @ViewBuilder
-  private var rightTextfieldItem: some View {
-    if let tooltipIcon {
-      IconButton(icon: tooltipIcon) {
-        guard type != .password else {
-          isSecured.toggle()
-          return
-        }
-        guard !isFocused else {
-          inputValue = ""
-          return
-        }
-        // TODO: - jcholuj - 07.01.2022
-        /// Add handling tooltip action
-      }
-      .disabled(!isValid)
+  private var rightTooltipButton: some View {
+    if !isValid {
+      invalidTooltip
+    } else if type == .secured {
+      securedTooltipButton
+    } else if isFocused {
+      clearTooltipButton
+    } else if let tooltipAction {
+      IconButton(icon: Constants.infoIcon, action: tooltipAction)
     }
   }
   
-  private var tooltipIcon: String? {
-    guard type != .password else {
-      return isSecured ? Constants.visibleIcon : Constants.invisibleIcon
+  private var invalidTooltip: some View {
+    IconButton(
+      icon: Constants.errorIcon,
+      action: {}
+    )
+    .disabled(true)
+  }
+  
+  private var clearTooltipButton: some View {
+    IconButton(icon: Constants.clearIcon) {
+      inputValue = ""
     }
-    switch (isValid, isFocused, type.hasTooltip) {
-    case (false, _, _):
-      return Constants.errorIcon
-    case (true, true, _):
-      return Constants.clearIcon
-    case (true, false, true):
-      return Constants.infoIcon
-    default:
-      return nil
+  }
+  
+  private var securedTooltipButton: some View {
+    IconButton(
+      icon: isSecured
+        ? Constants.visibleIcon
+        : Constants.invisibleIcon
+    ) {
+      isSecured.toggle()
     }
   }
 }
@@ -130,22 +134,21 @@ private extension InputView {
 
 // MARK: - Constants
 
-private extension InputView {
-  enum Constants {
-    static let searchIcon = "search"
-    static let clearIcon = "clear"
-    static let errorIcon = "error"
-    static let infoIcon = "info"
-    static let visibleIcon = "visible"
-    static let invisibleIcon = "invisible"
-    static let textFieldHeight: CGFloat = 56
-    static let componentHeight: CGFloat = 100
-    static let textFieldSpacing: CGFloat = 0
-    static let componentSpacing: CGFloat = 4
-    static let cornerRadius: CGFloat = 4
-    static let selectedBorderWidth: CGFloat = 2
-    static let unselectedBorderWidth: CGFloat = 1
-    static let leadingRegularPadding: CGFloat = 16
-    static let leadingSmallPadding: CGFloat = 14
-  }
+fileprivate enum Constants {
+  static let searchIcon = "search"
+  static let clearIcon = "clear"
+  static let errorIcon = "error"
+  static let infoIcon = "info"
+  static let visibleIcon = "visible"
+  static let invisibleIcon = "invisible"
+  static let textFieldHeight: CGFloat = 56
+  static let componentHeight: CGFloat = 100
+  static let textFieldSpacing: CGFloat = 0
+  static let componentSpacing: CGFloat = 4
+  static let cornerRadius: CGFloat = 4
+  static let selectedBorderWidth: CGFloat = 2
+  static let unselectedBorderWidth: CGFloat = 1
+  static let leadingRegularPadding: CGFloat = 16
+  static let leadingSmallPadding: CGFloat = 14
+  static let securedButtonAnimation: Animation = .linear(duration: 0.1)
 }

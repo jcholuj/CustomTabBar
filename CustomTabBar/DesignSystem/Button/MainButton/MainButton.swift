@@ -1,43 +1,29 @@
 import SwiftUI
 
 public struct MainButton: View {
-  public enum ButtonType {
-    case primary
-    case secondary
-    case tertiary
-  }
-  
-  let type: ButtonType
   let title: String
-  let image: String?
   let action: () -> ()
+  var type: ButtonType = .primary
+  var image: String?
   
-  public init(
-    title: String,
-    image: String? = nil,
-    type: ButtonType = .primary,
-    action: @escaping () -> ()
-  ) {
-    self.title = title
-    self.image = image
-    self.type = type
-    self.action = action
-  }
+  @Environment(\.isEnabled) private var isEnabled
   
   public var body: some View {
     switch type {
     case .primary:
       buttonContent
-        .buttonStyle(Styles.Buttons.primary)
+        .buttonStyle(PrimaryStyle(isEnabled: isEnabled))
     case .secondary:
       buttonContent
-        .buttonStyle(Styles.Buttons.secondary)
+        .buttonStyle(SecondaryStyle(isEnabled: isEnabled))
     case .tertiary:
       buttonContent
-        .buttonStyle(Styles.Buttons.tertiary)
+        .buttonStyle(TertiaryStyle(isEnabled: isEnabled))
     }
   }
+}
   
+private extension MainButton {
   private var buttonContent: some View {
     Button(action: action) {
       HStack {
@@ -50,17 +36,37 @@ public struct MainButton: View {
   }
 }
 
+public extension MainButton {
+  enum ButtonType {
+    case primary
+    case secondary
+    case tertiary
+  }
+}
+
+protocol MainButtonStyle: ButtonStyle {
+  associatedtype BaseLabel: View
+  func baseLabel(for configuration: ButtonStyle.Configuration) -> BaseLabel
+}
+
+extension MainButtonStyle {
+  func baseLabel(for configuration: ButtonStyle.Configuration) -> some View {
+    configuration.label
+      .padding(.horizontal, 16)
+      .font(Styles.Fonts.bodyMedium)
+      .frame(height: 48, alignment: .center)
+      .frame(maxWidth: .infinity)
+      .contentShape(
+        RoundedRectangle(cornerRadius: 24)
+      )
+  }
+}
+
+
 enum Styles {
   enum Fonts {
     static let bodyMedium = Font.system(size: 16, weight: .medium)
     static let smallRegular = Font.system(size: 12, weight: .regular)
     static let headerRegular = Font.system(size: 14, weight: .regular)
   }
-  
-  enum Buttons {
-    static let primary = PrimaryStyle()
-    static let secondary = SecondaryStyle()
-    static let tertiary = TertiaryStyle()
-  }
 }
-

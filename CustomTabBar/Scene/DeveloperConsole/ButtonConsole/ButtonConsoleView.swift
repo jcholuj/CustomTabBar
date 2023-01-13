@@ -9,45 +9,33 @@ struct ButtonConsoleView: View {
       VStack(spacing: 24) {
         MainButton(
           title: "Primary",
-          action: {
-            viewStore.send(.primaryButtonTapped)
-          }
+          action: { viewStore.send(.primaryButtonTapped) }
         )
         MainButton(
           title: "Secondary",
-          type: .secondary,
-          action: {
-            viewStore.send(.secondaryButtonTapped)
-          }
+          action: { viewStore.send(.secondaryButtonTapped) },
+          type: .secondary
         )
         MainButton(
           title: "Tertiary",
-          type: .tertiary,
-          action: {
-            viewStore.send(.tertiaryButtonTapped)
-          }
+          action: { viewStore.send(.tertiaryButtonTapped) },
+          type: .tertiary
         )
         MainButton(
           title: "Primary",
-          action: {
-            viewStore.send(.primaryButtonTapped)
-          }
+          action: { viewStore.send(.primaryButtonTapped) }
         )
         .disabled(true)
         MainButton(
           title: "Secondary",
-          type: .secondary,
-          action: {
-            viewStore.send(.secondaryButtonTapped)
-          }
+          action: { viewStore.send(.secondaryButtonTapped) },
+          type: .secondary
         )
         .disabled(true)
         MainButton(
           title: "Tertiary",
-          type: .tertiary,
-          action: {
-            viewStore.send(.tertiaryButtonTapped)
-          }
+          action: { viewStore.send(.tertiaryButtonTapped) },
+          type: .tertiary
         )
         .disabled(true)
         Text("Primary button tap counter: \(viewStore.primaryButtonTapCounter)")

@@ -2,49 +2,50 @@ import ComposableArchitecture
 import SwiftUI
 
 struct ControllerView: View {
-  private let store: Store<Controller.State, Controller.Action>
+  private let items: [SelectableModel]
+  private let type: ControllerType
   private let screenWidth: CGFloat
   private var dataDividedIntoLines: [[SelectableModel]] = []
   
-  init(store: Store<Controller.State, Controller.Action>, screenWidth: CGFloat) {
-    self.store = store
+  @Binding private var selectedItems: [SelectableModel]
+  
+  init(
+    items: [SelectableModel],
+    type: ControllerType,
+    screenWidth: CGFloat,
+    selectedItems: Binding<[SelectableModel]>
+  ) {
+    self.items = items
+    self.type = type
     self.screenWidth = screenWidth
+    self._selectedItems = selectedItems
+    dataDividedIntoLines = divideDataIntoLines(lineWidth: screenWidth)
   }
 
   var body: some View {
-    HStack {
-      WithViewStore(store, observe: { $0 }) { viewStore in
-        switch viewStore.state.type {
-        case .selectable:
-          filterController(viewStore: viewStore)
-        case .segmentable:
-          segmentedController(viewStore: viewStore)
-        }
-      }
+    switch type {
+    case .selectable:
+      filterController
+    case .segmentable:
+      segmentedController
     }
   }
   
   @ViewBuilder
-  private func segmentedController(
-    viewStore: ViewStore<Controller.State, Controller.Action>
-  ) -> some View {
+  private var segmentedController: some View {
     HStack {
       HStack(spacing: 0) {
         ForEach(
           Array(
-            viewStore.state.segmentedItems
+            segmentedItems
           )
         ) { item in
           ControllerItemView(
             model: item,
-            type: viewStore.state.type,
-            selectedItems: viewStore.binding(
-              get: \.selectedItems,
-              send: Controller.Action.selectedItemsHasChanged
-            ),
-            isSelected: viewStore.state.selectedItems.contains(item.id)
+            type: type,
+            selectedItems: $selectedItems,
+            isSelected: selectedItems.contains(item)
           )
-          //.frame(maxWidth: .infinity)
         }
       }
       .frame(maxWidth: .infinity)
@@ -55,12 +56,10 @@ struct ControllerView: View {
   }
   
   @ViewBuilder
-  private func filterController(
-    viewStore: ViewStore<Controller.State, Controller.Action>
-  ) -> some View {
+  private var filterController: some View {
     VStack(alignment: .leading, spacing: Constants.itemsVerticalSpacing) {
       ForEach(
-        divideDataIntoLines(lineWidth: screenWidth, viewStore: viewStore)
+        dataDividedIntoLines
           .map { (data: $0, id: UUID()) },
         id: \.id
       ) { dataArray in
@@ -70,8 +69,8 @@ struct ControllerView: View {
               ControllerItemView(
                 model: data,
                 type: .selectable,
-                selectedItems: viewStore.binding(get: \.selectedItems, send: Controller.Action.selectedItemsHasChanged),
-                isSelected: viewStore.state.selectedItems.contains(data.id)
+                selectedItems: $selectedItems,
+                isSelected: selectedItems.contains(data)
               )
             }
           }
@@ -80,15 +79,12 @@ struct ControllerView: View {
     }
     .frame(
       width: screenWidth,
-      height: calculateVStackHeight(width: screenWidth, viewStore: viewStore)
+      height: calculateVStackHeight(width: screenWidth)
     )
   }
   
-  private func divideDataIntoLines(
-    lineWidth: CGFloat,
-    viewStore: ViewStore<Controller.State, Controller.Action>
-  ) -> [[SelectableModel]] {
-    let data = calculateWidths(for: viewStore.state.items)
+  private func divideDataIntoLines(lineWidth: CGFloat) -> [[SelectableModel]] {
+    let data = calculateWidths(for: items)
     var singleLineWidth = lineWidth
     var allLinesResult = [[SelectableModel]]()
     var singleLineResult = [SelectableModel]()
@@ -120,29 +116,26 @@ struct ControllerView: View {
     }
   }
   
-  private func calculateVStackHeight(
-    width: CGFloat,
-    viewStore: ViewStore<Controller.State, Controller.Action>
-  ) -> CGFloat {
-    let dataDividedIntoLines = divideDataIntoLines(lineWidth: width, viewStore: viewStore)
-    return (Constants.itemsVerticalSpacing + Constants.controllerItemHeight) * CGFloat(dataDividedIntoLines.count)
+  private func calculateVStackHeight(width: CGFloat) -> CGFloat {
+    (Constants.itemsVerticalSpacing + Constants.controllerItemHeight) * CGFloat(dataDividedIntoLines.count)
+  }
+}
+
+private extension ControllerView {
+  var segmentedItems: [SelectableModel] {
+    Array(items.prefix(upTo: type.itemsCount))
   }
 }
 
 struct ControllerView_Previews: PreviewProvider {
   static var previews: some View {
     ControllerView(
-      store: Store(
-        initialState: Controller.State(
-          selectedItems: [],
-          items: [
-            "Lorem ipsum", "Lorem ipsum", "Lorem ipsum", "Lorem ipsum", "Lorem ipsum", "Lorem ipsum", "Lorem ipsum", "Lorem ipsum", "Lorem ipsum"
-          ].map { SelectableModel(displayedName: $0) },
-          type: .selectable
-        ),
-        reducer: Controller()
-      ),
-      screenWidth: 375
+      items: [
+        "Lorem ipsum", "Lorem ipsum", "Lorem ipsum", "Lorem ipsum", "Lorem ipsum", "Lorem ipsum", "Lorem ipsum", "Lorem ipsum", "Lorem ipsum"
+      ].map { SelectableModel(displayedName: $0) },
+      type: .selectable,
+      screenWidth: 375,
+      selectedItems: .constant([])
     )
   }
 }

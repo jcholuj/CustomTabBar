@@ -66,19 +66,9 @@ struct BottomBarView: View {
   
   @ViewBuilder
   private var controllerConsole: some View {
-    let items = ["Lorem ipsum", "Lorem ipsum", "Lorem ipsum", "Lorem ipsum", "Lorem ipsum", "Lorem ipsum", "Lorem ipsum", "Lorem ipsum", "Lorem ipsum"].map(SelectableModel.init)
-    let mixedItems = ["Lorem ips", "Lorem ipsum23", "Lorem", "Lorem32", "Lorem4555", "Loremqipsum4535", "Lorem 23412", "ipsum", "Lorem3434ipsum"].map(SelectableModel.init)
-    let twoItems = ["Paid", "Unpaid"].map(SelectableModel.init)
-    let threeItems = ["Accepted", "Waiting", "Rejected"].map(SelectableModel.init)
-    
     ControllerConsoleView(
       store: Store(
-        initialState: ControllerConsole.State(
-          firstController: .init(selectedItems: [], items: items, type: .selectable),
-          secondController: .init(selectedItems: [], items: mixedItems, type: .selectable),
-          thirdController: .init(selectedItems: [], items: twoItems, type: .segmentable(.two)),
-          fourthController: .init(selectedItems: [], items: threeItems, type: .segmentable(.three))
-        ),
+        initialState: ControllerConsole.State(),
         reducer: ControllerConsole()
       )
     )

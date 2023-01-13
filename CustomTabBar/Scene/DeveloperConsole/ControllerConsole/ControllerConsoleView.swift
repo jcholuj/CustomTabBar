@@ -6,42 +6,33 @@ struct ControllerConsoleView: View {
   
   var body: some View {
     GeometryReader { geo in
-      WithViewStore(store, observe: { $0 }) { viewStore in
+      WithViewStore(store) { viewStore in
         VStack(spacing: 20) {
-          ControllerView(
-            store: store.scope(
-              state: \.firstController,
-              action: ControllerConsole.Action.firstControllerAction
-            ),
-            screenWidth: geo.size.width
-          )
+          ControllerView(items: viewStore.state.firstController.items, type: .selectable, screenWidth: geo.size.width, selectedItems: viewStore.binding(\.firstController.$selectedItems))
           Text("Selected items count: \(viewStore.firstController.selectedItems.count)")
           ControllerView(
-            store: store.scope(
-              state: \.secondController,
-              action: ControllerConsole.Action.secondControllerAction
-            ),
-            screenWidth: geo.size.width
+            items: viewStore.state.secondController.items,
+            type: viewStore.state.secondController.type,
+            screenWidth: geo.size.width,
+            selectedItems: viewStore.binding(\.secondController.$selectedItems)
           )
           Text("Selected items count: \(viewStore.secondController.selectedItems.count)")
           ControllerView(
-            store: store.scope(
-              state: \.thirdController,
-              action: ControllerConsole.Action.thirdControllerAction
-            ),
-            screenWidth: geo.size.width
+            items: viewStore.state.thirdController.items,
+            type: viewStore.state.thirdController.type,
+            screenWidth: geo.size.width,
+            selectedItems: viewStore.binding(\.thirdController.$selectedItems)
           )
-          if let item = viewStore.thirdController.selectedItem {
+          if let item = viewStore.state.thirdController.selectedItems.first {
             Text("Selected status: \(item.displayedName)")
           }
           ControllerView(
-            store: store.scope(
-              state: \.fourthController,
-              action: ControllerConsole.Action.fourthControllerAction
-            ),
-            screenWidth: geo.size.width
+            items: viewStore.state.fourthController.items,
+            type: viewStore.state.fourthController.type,
+            screenWidth: geo.size.width,
+            selectedItems: viewStore.binding(\.fourthController.$selectedItems)
           )
-          if let item = viewStore.fourthController.selectedItem {
+          if let item = viewStore.state.fourthController.selectedItems.first {
             Text("Selected status: \(item.displayedName)")
           }
         }
@@ -60,8 +51,8 @@ struct ControllerConsoleView_Previews: PreviewProvider {
         initialState: ControllerConsole.State(
           firstController: .init(selectedItems: [], items: items, type: .selectable),
           secondController: .init(selectedItems: [], items: mixedItems, type: .selectable),
-          thirdController: .init(selectedItems: [], items: items, type: .segmentable(.two)),
-          fourthController: .init(selectedItems: [], items: items, type: .segmentable(.three))
+          thirdController: .init(selectedItems: [], items: mixedItems, type: .segmentable(.two)),
+          fourthController: .init(selectedItems: [], items: mixedItems, type: .segmentable(.three))
         ),
         reducer: ControllerConsole()
       )
